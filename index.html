@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心法箋 - 3x3 翻轉矩陣</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* 3x3 矩陣配置 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 200px); /* 電腦版固定 3 欄 */
+            grid-template-rows: repeat(3, 300px);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* 手機版自動縮小以符合螢幕 */
+        @media (max-width: 650px) {
+            .grid-container {
+                grid-template-columns: repeat(3, 30%;);
+                grid-template-rows: auto;
+                gap: 10px;
+            }
+            .card { height: 150px !important; }
+        }
+
+        .card {
+            perspective: 1000px;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        /* 翻轉動作 */
+        .card.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 確保原圖比例完整呈現 */
+            background-color: white;
+        }
+
+        /* 背面旋轉 180 度 */
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-container" id="grid">
+    </div>
+
+<script>
+    // 請在此處填入你的 9 個主題檔名
+    const themes = [
+        'A', 'B', 'C', 
+        'D', 'E', 'F', 
+        'G', 'H', 'I'
+    ];
+
+    const grid = document.getElementById('grid');
+
+    // 建立 3x3 卡片
+    themes.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        card.innerHTML = `
+            <div class="card-inner">
+                <div class="card-face card-front">
+                    <img src="${name}.jpg" alt="${name}">
+                </div>
+                <div class="card-face card-back">
+                    <img src="${name}1.jpg" alt="${name}1">
+                </div>
+            </div>
+        `;
+
+        // 點擊翻轉事件
+        card.addEventListener('click', function() {
+            this.classList.toggle('is-flipped');
+        });
+
+        grid.appendChild(card);
+    });
+</script>
+
+</body>
+</html>
